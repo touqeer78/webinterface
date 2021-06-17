@@ -6,11 +6,13 @@ phases:
       - $(aws ecr get-login --no-include-email --region ap-southeast-2)
   build:
     commands:
+      - cd MVCWebInterface
       - docker build -t mvcwebinterface .
       - docker tag mvcwebinterface:latest 238918055335.dkr.ecr.ap-southeast-2.amazonaws.com/mvcwebinterface:latest
   post_build:
     commands:
+      - cd ..
       - docker push 238918055335.dkr.ecr.ap-southeast-2.amazonaws.com/mvcwebinterface:latest
-      - printf '[{"name":webinterface-task,"imageUri":"%s"}]' 238918055335.dkr.ecr.ap-southeast-2.amazonaws.com/mvcwebinterface:latest > imagedefinitions.json
+      - printf '[{"name":"webinterface-task","imageUri":"%s"}]' 238918055335.dkr.ecr.ap-southeast-2.amazonaws.com/mvcwebinterface:latest > imagedefinitions.json
 artifacts:
   files: imagedefinitions.json
